@@ -1,0 +1,5 @@
+push_back and emplace_back
+
+push_back : when the object is created outside if we try to add it inside the container we go for push_back
+emplace_back : it construct the object while passing as a argument to the container , copy /move temporary memory not at all required here.
+
