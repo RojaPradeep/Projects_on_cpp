@@ -1,0 +1,249 @@
+Please refer below questions: 
+1. Explain about your experienced.
+2. Explain the oops concepts in details
+3. How many virtual functions will be present in A's and B's virtual table 
+    class A
+    {
+    	public:
+    	void f1();
+    	virtual void f2() {};
+    	virtual void f3() {};
+    	virtual void f4() = 0;
+    };
+    class B : public A
+    {
+    	public:
+    	void f2() {} override ;
+    	void f4() {} override;
+    };
+ 
+4. Find the issue in below code snippet and fix it
+    void process() {
+       int* arr = new int[100];
+       if (someCondition) {
+           return;
+       }
+       delete arr;
+    }
+5. What is the output for below snippet and after making base class destructor as virtual. 
+   What is  virtual destructor? 
+    class Base
+    {
+        public:
+        Base()
+        {
+          cout<<"Base constructor"<<endl;
+        }
+        ~Base()
+        {
+          cout<<"Base destructor"<<endl;
+        }
+    };
+    class Derive : public Base
+    {
+        public:
+        Derive()
+        {
+            cout<<"Derive constructor"<<endl;
+        }
+        ~Derive()
+        {
+            cout<<"Derive destructor"<<endl;
+        }
+    };
+    int main()
+    {
+        Base* b = new Derive;
+        delete b;
+    }
+6. Implement your own string class
+    - Constructor
+    - Destructor
+    - Copy Constructor
+    - Copy Assignment operator
+7. Explain about Smart Pointers and where you used?
+8. Solid principle
+9. What is array and vector? Advantages and disadvantages
+10. What is list?
+11. When we have to use list/array/vector?
+12. If I have 105 (number not fixed) object and want to store it, how to decide vector capacity while implementing vector class.
+    Can I keep initially capacity as 100? (vector internal working)
+	
+	
+I have collected below questions : 
+1. Explain about previous experience and project.
+2. What challenges you have faced in previous project and how you resolved it.
+3. Asked the questions on resume.
+4. Questions on Memory optimization and performance optimization
+5. What is RAII?
+6. Smart Pointers
+7. OOPs concept with code 
+8. virtual destructor, vtable, vptr
+9. Questions related to map
+    map<Person, int> persons;
+    persons.insert({*p, 100}); 
+    Solution : operator overloading
+    bool operator<(const Person &other) const
+    {
+        return (age < other.age);
+    }
+10. push_back and emplace_back related questions using oops code (vector of class object) 
+11. Internal working of vector. What is size and capacity.
+12. reserve() and resize() function
+13. Object slicing
+
+
+i recollected these:
+1. deadlock scenario:
+ 
+std::mutex m1, m2;
+ 
+void thread1(){
+	std::lock lck {m2, m1};
+std::cout<<"Inside thread1"<<endl;
+}
+ 
+void thread2(){
+m1.lock();
+m2.lock();
+std::cout<<"Inside thread2"<<endl;
+m1.unlock();
+m2.unlock();
+}
+int main()
+{
+std::thread t1(thread1);
+std::thread t2(thread2);
+t1.join();
+t2.join();
+ 
+return 0;
+}
+ 
+2. write two threads with synchronization:
+ 
+ 
+std::mutex mtx;
+std::condition_variable cv;
+int N = 10;
+int i=0;
+ 
+void foo(std::string &msg)
+{
+	std::unique_lock lck(mtx);
+ 
+	cv.wait(lck, []() { return i<N; });
+ 
+msg = "Foo " + msg;
+ 
+	++i;
+ 
+	cv.notify_all();
+}
+ 
+void bar(std::string &msg)
+{
+	std::unique_lock lck(mtx);
+ 
+	cv.wait(lck, []() { return i<N; });
+ 
+msg = "Bar " + msg;
+ 
+	++i;
+ 
+	cv.notify_all();
+}
+ 
+int main()
+{
+string name = "Name";
+std::thread t1(foo, name);
+std::thread t2(bar, name);
+t.join();
+std::cout <<name<<std::endl;
+}
+ 
+3. constructor delegation:
+class A {
+public:
+A() { cout << "A::A()" << endl; }
+A(int) : A() {} // proper delegation
+void show() { cout << "A::show()" << endl; }
+};
+ 
+4. use_count and reset semantics (smart pointers)
+ 
+5. Caching strategies: LRU, etc.
+
+
+About recent project 
+What is Polymorphism, why do we use. 
+Method overloading real time example with code. 
+Difference between List and dictionary. 
+What is solid principle 
+What is interface segregation principle, objective of using Interface segregation principle. Write code of real example 
+ If you have used singleton design pattern, what was the scenario. Write code 
+Which authentication technique you have used, explain the one you used. 
+Have you used parallel programming, explain async/await how works. 
+What are filters in rest api. 
+Explain each filters and how to implement and register. 
+If two Methods with the same name, which will be called based on the  parameter 
+ 
+Void Add(int a, int b){} 
+Void Add(long a, long b) {} 
+ 
+If we call Add(10,10); which one method will be called. And it is a                 overloading or method overriding? 
+ 
+What is the difference between virtual and new in c# 
+Write a program to count the occurrence of character in a string and let know if any other way to count.  
+What is the custom function in sql 
+If a function taking 2 inputs and returning 1 output in scalar function, then how to call function. 
+How to call table valued function. 
+What is the difference between Dictionary and Concurrent Dictionary  
+What AI tools are using and how? 
+Clustered and non clustered index 
+Difference between primary key and unique key 
+Have you worked in Entity Framework 
+Last project  details, technical details 
+Challenges faced in last project 
+Application Optimization 
+ASync await details 
+GitHub Copilot  use cases --agent vs ask mode 
+Message bus related questions 
+Unit testing  NUNIT . 
+REST API , security and authentication and authoriation 
+Application Performance  optimization 
+General process related questions 
+Have you implemented an api from scratch. 
+Can we write where clause with Joins and example. 
+How did you used Copilot ? What was the use case. 
+Explain project and the structure. 
+What's there in request payload and how code knows that this is a JSON format or XML format request. 
+What is Serialization and Deserialization used in API 
+Implementation and error handling in API 
+How you implemented the api part and how you handled the error with specific status codes. 
+Data Annotations 
+How ModelState.IsValid Validate the data? 
+What is mocking in Unit Testing. 
+Distributed and Memory Cache 
+Which one is preferred most? 
+Project Specific Questions 
+Role based Authentication and Authorization 
+AI: Git Hub Copilot basics used in Project.
+ 
+1. Explain Where are oops concepts used in your automation framework
+2. What method overloading and method overriding
+3. Write Code for Method Overriding
+4. Write code to get list of words having more than 4 characters
+      Get all names longer than 4 characters
+      string[] names = { "John", "Alice", "Bob", "Charlie" };
+      // Expected Output: Alice, Charlie
+5. API status code
+6. Authentication and Authorization
+7. which authentication used?
+8. Constructor Return type
+9. Types of Constructor
+10.Access Modifier
+11. Do you have used AI tools in your project
+12. Which modules used in AI
+13. Singleton Concept where use
