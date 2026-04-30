@@ -247,3 +247,94 @@ AI: Git Hub Copilot basics used in Project.
 11. Do you have used AI tools in your project
 12. Which modules used in AI
 13. Singleton Concept where use
+
+
+thesecond template parameter in the unique_ptr is a deleter which helps to automatically manages the resources used and manainly focusing towards to clean up the resource sother than delete the resources.
+unique_ptr<int[]>ptr(new int[10]); or auto ptr=make_unique<int []>(10);
+
+#include <cstdio>
+#include <memory>
+#include <iostream>
+
+struct FileCloser {
+    void operator()(std::FILE* f) const {
+        if (f) {
+            std::fclose(f);
+            std::cout << "closed\n";
+        }
+    }
+};
+int main()
+{
+    std::unique_ptr<std::FILE, FileCloser> fp(
+        std::fopen("C:\\Roja\\New folder\\Notes.txt", "r")
+    );
+    if (!fp) {
+        std::perror("fopen failed");
+        return 1;
+    }
+
+    std::cout << "roja\n";
+}
+
+
+writing double linked list using smartpointers:
+#include<iostream>
+#include<memory>
+using namespace std;
+struct Node{
+   int data;
+   shared_ptr<Node>next;
+   weak_ptr<Node>prev;
+   Node(int val):data(val){}
+};
+class doublelinkedlist
+{
+   shared_ptr<Node>head;
+ public:
+  void insert(int val)
+{
+auto newnode=make_shared<Node>(val);
+if(!head){head=newnode;return;}
+else{auto temp=head;
+while(temp->next)
+{temp=temp->next;}
+     temp->next=newnode;
+	 newnode->prev=temp;
+
+}
+}
+void printforward()
+{
+auto temp=head;
+if(!head){return;}
+else{
+while(temp)
+{cout<<temp->data<<endl;
+temp=temp->next;
+}
+    cout<<"\n";
+}
+}
+
+void backward()
+{
+auto temp=head;
+if(!head){return ;}
+else{while(temp->next){temp=temp->next;}}
+while(temp)
+{   cout<<temp->data<<endl;
+    temp=temp->prev.lock();
+}
+}  
+};
+
+int main()
+{
+doublelinkedlist obj;
+obj.insert(10);
+obj.insert(20);
+obj.insert(30);
+obj.printforward();
+obj.backward();
+}
