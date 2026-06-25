@@ -3,3 +3,246 @@ push_back and emplace_back
 push_back : when the object is created outside if we try to add it inside the container we go for push_back
 emplace_back : it construct the object while passing as a argument to the container , copy /move temporary memory not at all required here.
 
+
+smartpointers:
+
+
+auto p=make_unique<Rectangle>(1,2);
+unique_ptr<Rectangle>p(new Rectangle(1,3));
+unique_ptr<rectangle>p=make_unique<rectangle>(1,2);
+
+
+memory layout
+stack
+heap
+Block strated by symbol [BSS]
+Data segment
+code segment
+
+stack :
+   fast,automatic ,limited, risk of stack overflow ,function scope of lifespan
+Heap: 
+   slow, mananed by new/malloc/calloc ,large, memory leakage, until freed
+
+
+malloc| calloc| realloc
+   malloc:int *arr=(int*) malloc(sizeof(int));     1 paramter ,no intialization ->garbage value ,if fails to alocate it return  null ,faster
+   calloc: arr=(int*) calloc(5,sizeof(int));    2 paratermer, initialization to 0,null,slow ,block of memory is allocated with 0 values
+   realloc:arr =(int*)realloc (ptr,sizeof(int)); 2 paraterms[old ptr,size], used to resize the existing memory block,no initialization only copying the existing old data ,slower
+   
+Dangling pointer: pointer pointing to memory which is no loger valid/freed memory.
+example:
+    int* fun()
+	{
+	int x=10;
+	return &x;
+	}
+    int main()
+	{
+	int* p=fun();
+	cout<<*p;
+	return 0;
+	}
+	
+	void ptr()
+	{
+	   int *ptr=&x;
+	   return ptr;
+	}
+	void fun()
+	{
+	   int* ptr=(int*)malloc(sizeof(int));
+	   return ptr;
+	}
+shallow copy and Deep copy
+   copies member variables only no allocation for dynamic resources         copies the member variables and allocate new memory to it the dynamic resources.
+   objects  shares the memory address                                       objects doesnot share the memory address
+   impact                                                                   no impact
+   dangling pointet double deletion                                         no
+   default copy constructor                                                 custom copy constructor/assignemt operator are needed.
+   
+ ex:                                                                          
+    class Base{
+	int *ptr;
+	public:
+	 Base(){ptr=new int(10);}
+	 ~Base(){delete ptr;}
+	}
+   int main()
+   {
+   Base b1;
+   Base b2=b1;
+   }
+   
+   }
+   #include <iostream>
+using namespace std;
+
+ class Base{
+	int *ptr;
+	public:
+	 Base(){ptr=new int(10);}
+	 ~Base(){delete ptr;}
+     Base(const Base&obj){
+        ptr=new int(*obj.ptr);
+     }
+     void print()
+     {
+        cout<<*ptr<<"\n";
+     }
+	};
+   int main()
+   {
+   Base b1;
+   Base b2=b1;
+   b1.print();
+   b2.print();
+   }
+
+RAII: Resources Acquisition in intialization resources are acquired at constructor and released at destructors
+
+
+Networking:SIP [Session Initiation Protocol]
+Basic:
+     IP Address: Unique identification address which is assigned to a device over a network to identify.
+	 Port Number:  16 bit 1 to 655536 identifies a application /services to run on asystem 3306[Mysql]  http[80] http[443] ftp [21]
+	 TCP VS UDP:
+	 DNS:
+   
+     Layer in Networks:
+	 Application Layer
+	 Presentation Layer
+	 Session Layer
+	 Trnasport Layer
+	 network layer
+	 data link layer
+	 physical layer
+SIP :
+ What is SIP?
+    SIP is Sesssion Initiative Protocol which is used to initiate, manage and terminate the communication session over a IP networks.
+ What is RTP?
+    RTP is Real Transport Protocol actual transfer of data audio/vedio interms of packets once the connection session is established during a call.
+
+
+Difference b/w SIP and RTP
+             SIP                                                                       RTP 
+    Set up the call establish                               Transfer the data once the connection is established 
+ 	signaling protocol 										Media Tranport protocol
+	uses port 5060,5061 									used dynamic udp ports
+	INVITE,ACK,BYE messages 								Audio/Vedio Packets
+
+SBC :
+  What is SBC?
+     Session Border Controller : 
+	     It is a network device which allows the secure control and manage SIP based audio/vedio voip based connections between different networks.
+		 
+		 Advantages:
+		 1.Security : avoid sip spoofing, hiding internal ip
+		 2.Call routing: decides the best route to comminicate
+		 3. quality of service: provide good audio ,vedio quality over call
+		 4.Nat traversal: traversal of call over firwall
+		 5.Interoperability:convert protocol/codees betweeen different system
+		 
+SDP:
+   What is SDP?
+   Session Description Protocol:
+   It is format used to decscribe the multimedia [audio/vedio] session.
+   describe:
+            which codec to use?
+			ip address use to send the media
+			port number ?
+			media either audio/vedio?
+			media capabilitiy
+	
+	
+v=0
+o=- 12345 67890 IN IP4 192.168.1.10
+s=VoIP Call
+c=IN IP4 192.168.1.10
+t=0 0
+m=audio 5004 RTP/AVP 0
+a=rtpmap:0 PCMU/8000
+
+FieldMeaning
+v=Version
+o=Owner /s session ID
+s=Session name
+c=Connection (IP address)
+m=Media type + port
+a=Attributes (codec info)
+
+Flow of Call?
+      Fisrt SIP starts the session by using INVITE message 
+	  SDP has codec information, media type info ,port number, session name 
+	  Receiver will responds to the SDP 
+	  SIP connection establish
+	  Through RTP data / Media transfer via UDP Protocol.
+	  
+Visual Representation:
+
+    Caller → INVITE (SIP + SDP)
+    Receiver → 200 OK (SIP + SDP)
+    Caller → ACK
+
+👉 Then RTP (voice flows)
+	  
+
+sudo apt update
+
+sudo apt upgrade
+
+sudo apt update
+
+sudo apt install -y build-essential clang clang-format clang-tidy lldb lld
+
+sudo apt install -y cmake
+
+sudo apt install -y ninja-build
+
+cc -v
+
+clang --version
+
+sudo apt install ccache -y
+
+sudo apt install clang-format -y
+
+sudo apt install cppcheck -y
+
+sudo apt install clang-tools -y
+
+sudo apt install clang-tidy -y
+
+sudo apt install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+
+echo   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list
+
+
+sudo apt update
+
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo docker run hello-world
+
+mkdir ~/repos
+ 
+wsl --install Ubuntu-24.04
+ 
+ 
+   
+   
+   
+   
+   
+   
+
+
