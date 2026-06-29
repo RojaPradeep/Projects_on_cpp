@@ -1,0 +1,374 @@
+Csharp Questions And Answer:
+
+what is difference between Abstract class and interface?
+
+
+Abstract class :                                        interface
+
+supports single inheritance                            supports multiple inheritance,
+have constructor to intializebase paramters            does not have constructor 
+it can have                                            it mainly cotain method declaration [properties/events]
+abstract method[no implementation]					   no instance fields are supported
+concrete method[with implementation]                  
+instance fields,properties
+when we want the share the common functionality       when we wants the multiple class to implement the behavioural typewe use interface
+accross the related classes
+
+var and dynmic:
+
+var                                                     dynamic
+var x=10;                                        dynamic x=10;
+x="roja";//compile time error   				x="roja"; //allowed
+compile time checking                          run time checking
+compiler will implicit type checking           decided at runtime so it holds good for any data type and decided at run time.
+once it is assigned not possible to 
+modify the type if do so compiler will 
+generate the error    
+faster performance                             slower compared to var  
+strongly typed ,type safe                      less type safe    
+var is compile time typed and strongy typed,   dynamic is run time typed and flesxible but risky.
+
+value type and reference types:
+
+value type                                              reference type
+int x=10;                                         Object obj=x;
+it holds the actual data                          it holds the refernce to the actual data
+memory is allocated in the stack                 memory is allocated in heap
+all primitive type,enum,struct       			  all record,class,delegates,events,collections,list<>,dictonairy<key,value>,class,string are reefrence types
+are values types                                   
+each varibale has its own copy                    multiple varibales can hold the reference to the single object
+changing one varibale doesnot impact on other     changing one impact on other object 
+
+boxing and unboxing
+
+boxing                                                                                unboxing                  
+int x=10;                                                                     int y=(int)obj; 																										
+object obj=x;														    converting reefrence type into value type
+Involved in converting the value type into reference type               based on the type data in meta data clr will involved in converting refernec     
+where clr Common language runtime library                              type into value type if type mismatches it will through error  
+allocates the memory block in the heap and stores the                  Requries explicit type casting
+meta data which has information of data type and actual data
+and returns the reference to the stack object
+this is costier                                                         costiler but much as boxing
+heap memory aloocation,													type checking,
+garbace collector pressure,												runtime exception,
+copying overhead												        casting is required.
+extra memory allocation
+
+Explain SOLID principles with one real example (from Web API if possible).
+Single Repository Principle:Each class should responsible to perform single task meaning it would needs modification for only single task
+Open closed principle: Class should provide closed for modification of behaviour but open for extension the functionality.
+Liskov substitution priciple:derived class is should be able to replace the functionality of base class.
+interface segregation principle:Seperate interface need to create for each task so that no need to force all the classes to implement all the behaviour.
+Depencency injection principle:High level models no need to depend on the low level models  both depend on abstractions
+
+Example for eah one wrt Web Api Aspect:
+1).SRP
+public interface IOrderRepository{
+    public void save(Order order);
+}
+here i have created the interface where it performs single task 
+
+public interface IOrderRepository{          //not follows SRP
+    public void save(Order order);
+	public void  sendnotification(string message);
+}
+
+2).OCP
+public interface IOrderRepository
+{  
+     public void save(order o);
+}
+public class Order:IOrderRepository
+{
+    Void save(order order)
+	{
+	   //implemetation
+	}
+}
+public interface IOrderservices
+{
+    public void Placeorder(Order o);
+}
+public class orderserives:IOrderservices
+{
+    void Placeorder(Order o)
+	{
+     //implementation	
+	}
+}
+public class Premiumdiscount:IOrderservices
+{
+    void Placeorder(Order o)
+	{
+     //implementation	
+	}
+}
+
+3).LSP
+public interface IOrderRepository
+{
+  public void PlaceOredr(order o);
+}
+public class SqlRepository:IOrderRepository
+{
+   void PlaceOredr(Order o)
+   {//implemeation;}
+}
+now i can use sqlrepository in pace of iorderrepository
+IOrderRepository repo = new SqlRepository(); // works fine
+
+
+4).ISP:
+public interface IOrderRepository
+{  
+ void placeorder(Order o); 
+}
+public interface INotify
+{ 
+void Notification(string message);
+}
+Seperate interface has created for each task so derived class if it reuires the behaviour they can inherit or else forecully making to implenting is avoided.
+
+5).DIP:
+builder.services.addscoped<IOrderRepository,sqlrepository>();
+where via constructor injection objcet is created not manually and provide scoped based object created.
+public class OrderController:Controllerbase
+{
+    private readonly IOrderRepository _repo;
+
+    public OrderController(IOrderRepository repo)
+    {
+        _repo = repo;
+    }
+}
+Solid Principles are required to design a maintainable,scable and losse coupled application.
+
+What is Dependency Injection (DI) in ASP.NET Core?
+builder.services.AddScoped<IOrderRepository,sqlrepository>();
+public class OrderController
+{
+   private readonly IOrderRepository _repo;
+   public OrderController(IOrderRepository repo)
+   {
+     _repo=repo;
+   }
+}
+
+ASP.NET Core automatically creates and injects object
+builder.serives.AddScoped<IOrderRepository,sqlrepository>();
+Types of Dependency Injection:
+Constructor injection,
+method injection,
+property injection
+
+why DI is used?
+Loose coupling,supports OCP,DI solid principles,Maintainability,scabilability,easy unit testing
+
+Depency injection is a design pattern in asp.net core where depencency is provided via constructor/method to class instead of creating inside the class which 
+provides loose coupling,maintainability and scability.It is a design pattern where instead of class creating a object manually provding a dependices 
+(serives/object) to a class.
+
+Difference between constructor injection and method injection?
+
+Constructor Injection                                                   Method Injection
+Depencency mandatory are provided to the class via constructor               depencency is optional and where ever required are passed via method
+lifetime of depency until the obejct                                         lifetime of depency during the execution
+ensure object is always in valid state                                        object may not always be in the valid state
+more preferred                                                                not more preferred
+                                                  
+class OrderController:controllerbase{									class orderservices{
+																		private readonly IOrderRepository _repo;
+    private readonly IOrderRepository _repo;									public void ServiceProcess()							
+	public OrderController(IOrderRepository repo)								{
+	{																			_repo.save(new order());
+	   _repo=repo;																 }
+	}
+
+
+}
+What is a delegate?
+Delegates is type safe function pointer  which holds the references to one or more methods when the signature matches and allows them to invoke.
+
+namespace ConsoleApp1
+{
+   
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            NotificationMethods notification = new NotificationMethods();
+            Notify notify = notification.SMSNotification;
+            notify += notification.EmailNotification;
+            notify?.Invoke("message is sent");
+            Console.ReadKey();
+        }
+    }
+    class NotificationMethods
+    {
+        public void  SMSNotification(string message)
+        {
+            Console.WriteLine("SMS Notification is send");
+        }
+        public void EmailNotification(string message)
+        {
+            Console.WriteLine("Email Notification is send");
+        }
+    }
+   
+    
+        public  delegate void Notify(string message);
+    
+}
+
+what is Event?
+Event driven Program is program flow is controlled by event.
+in Events we have 4 things  :
+Publisher:The object who raises the event
+Subscribers: The Object who listens to it + handle and subscribes to the event.
+Event handler: the method which executed when event occurs
+Event: the Notification sent by the publisher
+
+class program{
+  public static void Main()
+  {
+  Process process=new Process();
+  process.ProcessEvent += Process;
+  process.StratProcess();
+  }
+  public static void Process()
+  { 
+  Console.WriteLine("Event is processed");
+  }
+}
+class Process{
+   public delegate void Notify();
+   public event Notify ProcessEvent;
+   
+   public void StratProcess()
+   {
+     Console.WriteLine("Process is started");
+	 ProcessEvent?.Invoke();
+   }
+
+}
+Event is  mechanism where one class (publishers) notifies the other classes(subscribers) when something happens.
+
+Difference between:
+
+Delegate                                                                                           Event
+This is a type safe function pointer where it holds the      It wraps around the delegates where one class[publisher] notifies the 
+references to one or more methods when signature matches.      other class [subscribers] when something happens.
+less secure                                                   more secure
+can be invoked anywhere                                       only publisher can raise the event
+can have multiple subscribes                                  subscribes can only subscribe/unsubscribe to the event
+usage :method callback                                        controlled acess to delegates
+
+
+Func / Action
+Action is a built in delegate which doesnot no return type
+public delegate void Notify(string message);
+
+Action<string>notify=(message)=>
+{ 
+    Console.WriteLine("message");
+};
+notify("hellow");
+less code, noreturn type ,takes 0 to 16 parameters ,always return void type 
+
+Fun<int,int,int>add=(a,b)=>{return a+b;}; int x=add(2,3);
+takes 0 to 16 parameters, has return type, 
+
+Why use Func/Action instead of custom delegate?
+custom delegates requires delegate signature to be written where as fun and action are built in delegates which reduces the code and  improving the maintainability.
+
+
+What is LINQ?
+C# has a new feature where it allows you to write a query based code within the language to work with various data sources likw [database,collection,list] no
+need to write seperate query language for data source database. 
+
+Language Integrated Query.
+ 
+Difference between:
+IEnumerable vs IQueryable
+
+
+✅ Round 4: ASP.NET Core Web API
+Q10. What is middleware in ASP.NET Core?
+👉 How does request flow work?
+
+Q11. Explain this flow:
+Client → Controller → Service → Repository → DB
+Why do we use this layered architecture?
+
+Q12. What is the difference between:
+
+AddScoped
+AddTransient
+AddSingleton
+
+👉 Give real example where each is used.
+
+Q13. What is Model Binding & Model Validation?
+
+Q14. Difference between:
+
+IActionResult                                                              ActionResult<T>
+Not strongly typed                              strongly typed
+Returns only HTTp action results             returns either http action result or actual data
+ok(user),NotFound(),BADREQUEST()            direct return user
+[HttpGet({"id"})]                           [HttpGet({"id"})]
+public IActionResult GetUser(int id)        public ActionResult<User> GetUser(int id)
+{                                           {
+    var user=_repo.GetUserById(id);          var user=_repo.GetUserById(id);
+	if(user==null)                            if(user==null)
+	{                                             return NotFound();
+	  return NotFound();                      return user;
+	}
+    return OK(user);
+}
+											Here T represents the expected response type.
+											
+swagger doesnot know the response body       Swagger can display the exact schema of USer object because of return type is ActionResult<user>
+becuase of return type is IActionResult
+
+✅ Round 5: Practical Coding / Scenario
+Q15. Suppose you have this API:
+C#[HttpGet("{id}")]public async Task<IActionResult> GetOrder(int id)Show more lines
+👉 How will you:
+
+Handle null result
+Return proper HTTP status codes
+Add logging
+
+
+Q16. How do you handle exceptions globally in ASP.NET Core?
+
+Q17. How will you secure your API?
+👉 Mention at least:
+
+Authentication
+Authorization
+Token-based security
+
+
+✅ Bonus (Advanced – Very Important for Interviews)
+Q18. What is the difference between:
+
+async/await
+synchronous code
+
+👉 What happens if we don’t use await?
+
+Q19. What is Entity Framework Core?
+👉 Difference between:
+
+DbContext
+DbSet
+
+
+Q20. What is API versioning and why is it needed?
+
+
+Authenication :
+
